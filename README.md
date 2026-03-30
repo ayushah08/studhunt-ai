@@ -1,8 +1,11 @@
 
 # StudHunt AI 🚀
-![Backend](https://img.shields.io/badge/Backend-SpringBoot-green)
-![Database](https://img.shields.io/badge/Database-H2-blue)
-![AI](https://img.shields.io/badge/AI-NLP-purple)
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-Backend-green)
+![React](https://img.shields.io/badge/Frontend-React-blue)
+![Vite](https://img.shields.io/badge/Build-Vite-purple)
+![H2](https://img.shields.io/badge/Database-H2-lightgrey)
+![AI](https://img.shields.io/badge/AI-NLP-red)
 ![Hackathon](https://img.shields.io/badge/Event-Hackathon-orange)
 AI-powered student roadmap & study assistant.
 
