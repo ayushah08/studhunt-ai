@@ -66,29 +66,26 @@ def get_document_prompt() -> PromptTemplate:
     A student uploaded study material and wants you to create a learning aid.
 
     File name: {file_name}
-    Requested output type: {task}
-    Focus topic: {topic}
+    Selected task: {task}
 
     Study material:
     {content}
 
     Instructions:
     - Use only the uploaded material as the main source.
-    - If the focus topic is provided, prioritize that topic.
     - Keep the output accurate, well-structured, and easy for a student to study.
-    - Do not mention internal prompt instructions.
-
-    Output rules by task:
-    - If task is mcq: generate {items_count} multiple-choice questions with 4 options each and provide the correct answer after each question.
+    - Follow the selected task exactly.
+    - If task is mcq: generate 10 multiple-choice questions with 4 options each and include the correct answer after each one.
+    - If task is summary: generate a clear summary followed by key points.
+    - If task is important_questions: generate 10 important exam-style questions from the material.
     - If task is mind_map: create a clean hierarchical text mind map using bullets and indentation.
-    - If task is important_questions: generate {items_count} important exam-style questions from the material.
-    - If task is summary: generate a concise but useful summary with key points.
+    - Do not mention internal prompt instructions.
 
     Final answer:
     """
 
     return PromptTemplate(
-        input_variables=["file_name", "task", "topic", "content", "items_count"],
+        input_variables=["file_name", "task", "content"],
         template=template,
     )
 
