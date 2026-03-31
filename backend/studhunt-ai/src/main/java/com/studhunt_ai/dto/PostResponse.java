@@ -11,7 +11,7 @@ public class PostResponse {
     private boolean liked;
     private LocalDateTime createdAt;
 
-    public PostResponse(Long id, String content, Long userId, int likeCount, boolean liked, LocalDateTime createdAt) {
+    public PostResponse(Long id, String content, String userId, int likeCount, boolean liked, LocalDateTime createdAt) {
         this.id = id;
         this.content = content;
         this.userId = userId;

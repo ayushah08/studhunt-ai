@@ -37,7 +37,7 @@ public class CommunityService {
                 new PostResponse(
                         post.getId(),
                         post.getContent(),
-                        post.getUserId(),
+                        post.getUserEmail(),
                         post.getLikeCount(),
                         false, // 🔥 TEMP
                         post.getCreatedAt()
@@ -54,7 +54,7 @@ public class CommunityService {
                 new PostResponse(
                         post.getId(),
                         post.getContent(),
-                        post.getId(),
+                        post.getUserEmail(),
                         post.getLikeCount(),
                         false,
                         post.getCreatedAt()
