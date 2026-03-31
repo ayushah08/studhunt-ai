@@ -1,6 +1,5 @@
 package com.studhunt_ai.service;
 
-import com.studhunt_ai.ai.OpenAIService;
 import com.studhunt_ai.dto.RoadmapRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
