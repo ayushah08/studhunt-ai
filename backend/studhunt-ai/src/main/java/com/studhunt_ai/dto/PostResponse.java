@@ -20,5 +20,10 @@ public class PostResponse {
         this.createdAt = createdAt;
     }
 
-    // getters
+    public Long getId() { return id; }
+    public String getContent() { return content; }
+    public Long getUserId() { return userId; }
+    public int getLikeCount() { return likeCount; }
+    public boolean isLiked() { return liked; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
