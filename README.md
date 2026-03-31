@@ -40,3 +40,109 @@
 ---
 
 ## 🏗️ Architecture
+
+Frontend (React) ↓ Spring Boot Backend ↓ AI Service (FastAPI + Gemini)
+
+---
+
+## 🔥 Features  
+
+### 🤖 AI Chat  
+- Study explanations  
+- Interview preparation  
+- Smart responses  
+
+### 🗺️ Roadmap Generator  
+- Step-by-step learning path  
+- Beginner → Advanced  
+
+### 📝 Study Material AI  
+- Upload files  
+- Generate:
+  - Summary  
+  - MCQs  
+  - Important questions  
+
+### 📄 Resume Builder  
+- AI-generated resumes  
+- Export as PDF  
+
+### 👤 Profile System  
+- Personalized student data  
+
+### 🌐 Community  
+- Post & interact  
+
+---
+
+## 🔑 API Documentation  
+
+### 🔐 Auth  
+POST /auth/register  
+POST /auth/login  
+
+### 👤 Profile  
+POST /user/profile  
+GET /user/profile/{userId}  
+
+### 🤖 AI APIs  
+POST /chat  
+POST /roadmap/generate  
+POST /resume  
+POST /resume/pdf  
+POST /study-material  
+
+### 🌐 Community  
+GET /community/posts  
+POST /community/post  
+DELETE /community/posts/{id}  
+DELETE /community/posts  
+
+---
+
+## 📦 Example Requests  
+
+### Chat  
+```json
+{
+  "message": "Explain DBMS",
+  "mode": "study"
+}
+
+Roadmap
+JSON
+{
+  "prompt": "Java backend developer roadmap"
+}
+🚀 Setup
+Bash
+git clone https://github.com/ayushah08/studhunt-ai.git
+cd studhunt-ai
+./mvnw clean install
+./mvnw spring-boot:run
+
+
+💡 Problem:
+Students face scattered resources, lack of planning, and no structured guidance.
+
+🚀 Solution:
+StudHunt AI provides:
+AI-generated roadmaps
+Smart learning assistant
+Resume builder
+Community platform
+
+🔥 Impact:
+One platform replacing:
+Roadmap blogs
+Resume tools
+Doubt-solving apps
+Study planners
+
+⚠️ Notes
+⏳ First request may be slow (Render cold start)
+⚡ AI runs on free tier → limited usage
+🔐 Backend securely handles AI APIs
+
+⭐ Support
+If you like this project, give it a ⭐
