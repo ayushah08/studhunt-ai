@@ -1,3 +1,5 @@
+from enum import Enum
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -19,3 +21,17 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer: str
+
+
+class StudyTask(str, Enum):
+    mcq = "mcq"
+    mind_map = "mind_map"
+    important_questions = "important_questions"
+    summary = "summary"
+
+
+class DocumentStudyResponse(BaseModel):
+    file_name: str
+    task: StudyTask
+    topic: str | None = None
+    output: str
