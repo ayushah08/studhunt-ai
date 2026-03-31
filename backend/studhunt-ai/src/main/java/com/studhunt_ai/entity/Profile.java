@@ -8,12 +8,14 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "profiles")
+@Builder
 public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long userId;
 
     private String academicYear;
     private String fieldOfInterest;
@@ -22,6 +24,4 @@ public class Profile {
     private String language;
     private String currentKnowledge;
     private String target;
-
-    private Long userId; // simple mapping (no relations now)
 }
