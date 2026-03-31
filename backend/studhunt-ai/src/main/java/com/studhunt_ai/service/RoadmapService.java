@@ -11,6 +11,6 @@ public class RoadmapService {
     private OpenAIService openAIService;
 
     public String generateRoadmap(RoadmapRequest request) {
-        return openAIService.generateRoadmap(request);
+        return "Roadmap generated got " + request.getGoal();
     }
 }
