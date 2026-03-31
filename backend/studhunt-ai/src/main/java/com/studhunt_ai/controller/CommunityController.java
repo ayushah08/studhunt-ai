@@ -33,8 +33,8 @@ public class CommunityController {
 
     // ✅ GET POSTS BY USER
     @GetMapping("/posts/user/{userId}")
-    public ResponseEntity<List<PostResponse>> getPostsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(communityService.getPostsByUser(userId));
+    public ResponseEntity<List<PostResponse>> getPostsByUser(@PathVariable String userEmail) {
+        return ResponseEntity.ok(communityService.getPostsByUser(userEmail));
     }
 
     // ✅ ADD COMMENT
