@@ -91,3 +91,51 @@ def get_document_prompt() -> PromptTemplate:
         input_variables=["file_name", "task", "topic", "content", "items_count"],
         template=template,
     )
+
+
+def get_resume_prompt() -> PromptTemplate:
+    template = """
+    You are StudHunt, an expert resume writer for students and early-career candidates.
+
+    Candidate information:
+    {candidate_info}
+
+    Instructions:
+    - Write a professional, ATS-friendly resume.
+    - Keep the language concise and achievement-focused.
+    - Do not invent facts that are not present in the input.
+    - Improve phrasing, structure, and clarity of the provided information.
+    - Use clear section headings.
+    - If some sections are empty, skip them.
+    - Keep the final resume clean and ready to export to PDF.
+
+    Output format:
+    Name
+    Contact
+
+    Professional Summary
+    ...
+
+    Skills
+    - ...
+
+    Experience
+    ...
+
+    Projects
+    ...
+
+    Education
+    ...
+
+    Certifications
+    ...
+
+    Achievements
+    ...
+    """
+
+    return PromptTemplate(
+        input_variables=["candidate_info"],
+        template=template,
+    )
