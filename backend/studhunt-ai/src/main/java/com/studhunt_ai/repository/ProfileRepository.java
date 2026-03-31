@@ -1,4 +1,7 @@
 package com.studhunt_ai.repository;
 
-public class ProfileRepository {
+import com.studhunt_ai.entity.Profile;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProfileRepository extends JpaRepository<Profile, Long> {
 }
