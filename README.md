@@ -27,13 +27,13 @@
 
 🧠 Overview
 
-StudHunt AI is a full-stack AI platform designed to help students:
+StudHunt AI is a full-stack AI platform that helps students:
 
 - 📚 Generate personalized learning roadmaps
 - 🤖 Ask AI-powered academic questions
-- 📝 Convert notes → summaries, MCQs, and key points
+- 📝 Convert notes into summaries, MCQs & key points
 - 📄 Build resumes instantly
-- 🌐 Engage with a student community
+- 🌐 Connect via student community
 
 ---
 
@@ -51,18 +51,18 @@ AI Service (FastAPI + Gemini)
 
 🤖 AI Chat
 
-- Smart explanations
+- Study explanations
 - Interview preparation
-- Concept breakdowns
+- Smart responses
 
 🗺️ Roadmap Generator
 
-- Beginner → Advanced learning path
-- Structured and goal-based
+- Step-by-step learning path
+- Beginner → Advanced
 
 📝 Study Material AI
 
-- Upload notes/files
+- Upload files
 - Generate:
   - Summary
   - MCQs
@@ -71,17 +71,15 @@ AI Service (FastAPI + Gemini)
 📄 Resume Builder
 
 - AI-generated resumes
-- PDF export
+- Export as PDF
 
 👤 Profile System
 
 - Personalized student data
-- Goal-based recommendations
 
 🌐 Community
 
-- Post and interact
-- Share knowledge
+- Post & interact
 
 ---
 
@@ -145,37 +143,37 @@ cd studhunt-ai
 🎯 Hackathon Pitch
 
 💡 Problem:
-Students struggle with structured learning, planning, and too many scattered resources.
+Students face scattered resources, lack of planning, and no structured guidance.
 
 🚀 Solution:
 StudHunt AI provides:
 
-- AI-powered roadmap generation
+- AI-generated roadmaps
 - Smart learning assistant
-- Resume building tools
-- Community support
+- Resume builder
+- Community platform
 
 🔥 Impact:
-A single platform replacing:
+One platform replacing:
 
-- Multiple learning tools
-- Resume builders
 - Roadmap blogs
-- Doubt-solving platforms
+- Resume tools
+- Doubt-solving apps
+- Study planners
 
 ---
 
 ⚠️ Notes
 
 - ⏳ First request may be slow (Render cold start)
-- ⚡ Gemini free tier → limited usage
-- 🔐 Backend securely handles AI requests
+- ⚡ AI runs on free tier → limited usage
+- 🔐 Backend securely handles AI APIs
 
 ---
 
 ⭐ Support
 
-If you like this project, give it a ⭐ on GitHub
+If you like this project, give it a ⭐
 
 "Footer" (https://capsule-render.vercel.app/api?type=waving&color=0:764ba2,100:667eea&height=120&section=footer)
 
