@@ -2,6 +2,7 @@ package com.studhunt_ai.controller;
 
 import com.studhunt_ai.entity.Comment;
 import com.studhunt_ai.entity.Post;
+import com.studhunt_ai.repository.PostRepository;
 import com.studhunt_ai.service.CommunityService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class CommunityController {
 
     @Autowired
     private CommunityService service;
+    @Autowired
+    private PostRepository postRepository;
 
     @PostMapping("/post")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
@@ -44,5 +47,17 @@ public class CommunityController {
             @RequestParam String type
     ) {
         return ResponseEntity.ok(service.reactToPost(postId, type));
+    }
+
+    @DeleteMapping("/community/posts/{id}")
+    public String deletePost(@PathVariable Long id) {
+        postRepository.deleteById(id);
+        return "Deleted";
+    }
+
+    @DeleteMapping("/community/posts")
+    public String deleteAll() {
+        postRepository.deleteAll();
+        return "All posts deleted";
     }
 }
