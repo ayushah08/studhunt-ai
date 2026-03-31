@@ -31,7 +31,9 @@ public class CommunityService {
     // ✅ GET ALL POSTS (LATEST FIRST)
     public List<PostResponse> getAllPosts() {
 
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Post> posts = postRepository.findAll(
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
 
         return posts.stream().map(post ->
                 new PostResponse(
@@ -39,16 +41,16 @@ public class CommunityService {
                         post.getContent(),
                         post.getUserEmail(),
                         post.getLikeCount(),
-                        false, // 🔥 TEMP
+                        false, // no like tracking yet
                         post.getCreatedAt()
                 )
         ).toList();
     }
 
-    // ✅ GET POSTS BY USER
-    public List<PostResponse> getPostsByUser(Long userId) {
+    // ✅ GET POSTS BY USER (EMAIL BASED)
+    public List<PostResponse> getPostsByUser(String userEmail) {
 
-        List<Post> posts = postRepository.findByUserId(userId);
+        List<Post> posts = postRepository.findByUserEmail(userEmail);
 
         return posts.stream().map(post ->
                 new PostResponse(
@@ -73,7 +75,7 @@ public class CommunityService {
         return commentRepository.findByPostId(postId);
     }
 
-    // ✅ LIKE (COUNT BASED)
+    // ✅ LIKE POST
     public Post reactToPost(Long postId, String type) {
 
         Post post = postRepository.findById(postId).orElseThrow();
