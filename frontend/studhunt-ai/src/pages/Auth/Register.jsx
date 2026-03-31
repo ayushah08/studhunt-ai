@@ -14,8 +14,13 @@ const Register = () => {
     confirmPassword: ''
   });
 
-  // --- 2. THE MISSING FUNCTION (Isse error solve hoga) ---
-const handleRegister = async (e) => {
+  // --- 2. FIXED: HandleChange Function (Iske bina screen white ho rahi thi) ---
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // --- 3. LOGIC ---
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -33,10 +38,10 @@ const handleRegister = async (e) => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        // 🚀 YE RAHI WO LINE: Username save ho raha hai
+        // Username save karo taaki Dashboard pe dikhe
         localStorage.setItem('username', response.data.username || formData.username); 
 
-        // Token aur userId save karna mat bhulna
+        // Token aur userId save karo
         if (response.data.token) localStorage.setItem('token', response.data.token);
         if (response.data.userId) localStorage.setItem('userId', response.data.userId);
 
@@ -53,15 +58,15 @@ const handleRegister = async (e) => {
     <div className="min-h-screen bg-[#0F172A] flex items-center justify-center p-4 font-sans selection:bg-indigo-500/30">
       <div className="bg-[#1E293B] w-full max-w-5xl rounded-[2.5rem] overflow-hidden flex shadow-2xl border border-slate-800 animate-in fade-in zoom-in duration-500">
         
-        {/* LEFT SIDE (Branding) */}
+        {/* LEFT SIDE */}
         <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-900 via-[#0F172A] to-[#0F172A] p-16 flex-col justify-between relative overflow-hidden text-left">
           <div className="z-10 uppercase font-black italic tracking-tighter text-white">
-            <h1 className="text-4xl mb-6">StudHunt AI</h1>
+            <h1 className="text-4xl mb-6 text-white">StudHunt AI</h1>
             <p className="text-slate-400 text-sm font-bold tracking-widest lowercase not-italic">Architecting academic excellence.</p>
           </div>
           <div className="bg-[#1e293b66] backdrop-blur-xl p-8 rounded-3xl border border-slate-700/50 z-10 shadow-xl">
             <p className="italic text-slate-300 text-sm mb-6 leading-relaxed font-bold tracking-widest">"The best way to predict your academic future is to design it."</p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 text-left">
               <div className="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center font-black text-white">AC</div>
               <div className="text-left">
                 <p className="text-xs font-bold text-white uppercase italic font-black">Alex Carter</p>
@@ -71,7 +76,7 @@ const handleRegister = async (e) => {
           </div>
         </div>
 
-        {/* RIGHT SIDE (Form) */}
+        {/* RIGHT SIDE */}
         <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col justify-center">
           <h2 className="text-3xl font-black text-white mb-2 tracking-tight uppercase italic text-left">Welcome to the Lab</h2>
           <form onSubmit={handleRegister} className="space-y-5 text-left font-bold uppercase tracking-widest text-[10px] mt-8">

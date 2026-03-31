@@ -21,15 +21,18 @@ const Login = () => {
         password: formData.password
       });
 
-      // 🔍 DEBUG: Check karo console mein ki backend kya bhej raha hai
+      // 🔍 DEBUG: Check backend response
       console.log("Backend Response Data:", response.data);
 
       if (response.status === 200 || response.status === 201) {
         
         // 🚀 Dost ke variables check karke save karo
-        // Agar response.data direct string hai toh wo token ho sakta hai
         const token = response.data.token || response.data.accessToken || response.data; 
         const userId = response.data.userId || response.data.id || 1;
+
+        // 🚀 USERNAME SAVE LOGIC: Agar backend se username nahi mil raha toh email ka pehla part use kar lo
+        const displayName = response.data.username || formData.email.split('@')[0];
+        localStorage.setItem('username', displayName);
 
         if (token) {
             localStorage.setItem('token', token);
@@ -43,7 +46,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert(error.response?.data?.message || "Login Fail! Credentials check karo.");
+      // Agar password galat hai toh backend ka message dikhao
+      alert("Error: " + (error.response?.data?.message || "Login Fail! Credentials check karo."));
     }
   };
 
