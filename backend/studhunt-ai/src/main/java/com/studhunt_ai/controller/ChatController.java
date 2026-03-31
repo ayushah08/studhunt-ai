@@ -1,8 +1,7 @@
 package com.studhunt_ai.controller;
 
 import com.studhunt_ai.service.OpenAIService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,18 +9,32 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/chat")
+@RequiredArgsConstructor
 @CrossOrigin("*")
 public class ChatController {
 
-    @Autowired
-    private OpenAIService openAIService;
+    private final OpenAIService openAIService;
 
     @PostMapping
-    public ResponseEntity<String> chat(@RequestBody Map<String, String> request) throws Exception {
+    public ResponseEntity<Map<String, String>> chat(@RequestBody Map<String, String> request) {
 
         String message = request.get("message");
         String mode = request.getOrDefault("mode", "study");
 
-        return ResponseEntity.ok(openAIService.getChatResponse(message, mode));
+        if (message == null || message.isBlank()) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Message cannot be empty")
+            );
+        }
+
+        String response = openAIService.getChatResponse(message, mode);
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "status", "success",
+                        "mode", mode,
+                        "response", response
+                )
+        );
     }
 }

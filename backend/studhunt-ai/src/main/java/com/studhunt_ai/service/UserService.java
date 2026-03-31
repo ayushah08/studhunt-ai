@@ -14,8 +14,11 @@ public class UserService {
 
     public String saveProfile(ProfileRequest request) {
 
-        Profile profile = new Profile();
+        Profile profile = profileRepository
+                .findByUserId(request.getUserId())
+                .orElse(new Profile());
 
+        profile.setUserId(request.getUserId());
         profile.setAcademicYear(request.getAcademicYear());
         profile.setFieldOfInterest(request.getFieldOfInterest());
         profile.setGoal(request.getGoal());
@@ -23,10 +26,9 @@ public class UserService {
         profile.setLanguage(request.getLanguage());
         profile.setCurrentKnowledge(request.getCurrentKnowledge());
         profile.setTarget(request.getTarget());
-        profile.setUserId(request.getUserId());
 
         profileRepository.save(profile);
 
-        return "Profile saved successfully";
+        return "Profile saved/updated successfully";
     }
 }

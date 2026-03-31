@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/notes")
+@CrossOrigin("*")
 public class NotesController {
 
     @Autowired
@@ -14,11 +15,11 @@ public class NotesController {
 
     @PostMapping("/summary")
     public String summary(@RequestParam("file") MultipartFile file) {
-        return notesService.generateSummary("dummy content");
+        return notesService.generateSummary(file);
     }
 
     @PostMapping("/mcq")
     public String mcq(@RequestParam("file") MultipartFile file) {
-        return notesService.generateMCQ("dummy content");
+        return notesService.generateMCQ(file);
     }
 }

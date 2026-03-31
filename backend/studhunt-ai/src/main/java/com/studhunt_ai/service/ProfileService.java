@@ -4,6 +4,7 @@ import com.studhunt_ai.dto.ProfileRequest;
 import com.studhunt_ai.entity.Profile;
 import com.studhunt_ai.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+
+
+    @Autowired
+    OpenAIService openAIService;
 
     // CREATE or UPDATE
     public Profile saveProfile(ProfileRequest request) {
@@ -37,4 +42,35 @@ public class ProfileService {
                 .findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
     }
+
+    public String generateRoadmapFromProfile(Long userId) {
+
+        Profile profile = getProfile(userId);
+
+        String prompt = """
+            I am a student with the following details:
+
+            Academic Year: %s
+            Field of Interest: %s
+            Goal: %s
+            Preferred Field: %s
+            Current Knowledge: %s
+            Target: %s
+
+            Create a structured roadmap with:
+            - Beginner to advanced steps
+            - Tools to learn
+            - Timeline
+            """
+                .formatted(
+                        profile.getAcademicYear(),
+                        profile.getFieldOfInterest(),
+                        profile.getGoal(),
+                        profile.getPreferredField(),
+                        profile.getCurrentKnowledge(),
+                        profile.getTarget()
+                );
+
+        // ✅ DIRECT roadmap endpoint
+return  openAIService.getRoadmap(prompt);  }
 }

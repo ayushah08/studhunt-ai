@@ -24,4 +24,10 @@ public class ProfileController {
     public Profile getProfile(@PathVariable Long userId) {
         return profileService.getProfile(userId);
     }
+
+    // 🔥 NEW: Generate roadmap from profile
+    @GetMapping("/profile/{userId}/roadmap")
+    public String getRoadmap(@PathVariable Long userId) {
+        return profileService.generateRoadmapFromProfile(userId);
+    }
 }

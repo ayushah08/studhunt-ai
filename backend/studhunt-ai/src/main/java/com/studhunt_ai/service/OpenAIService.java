@@ -1,86 +1,108 @@
 package com.studhunt_ai.service;
 
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class OpenAIService {
 
-    @Value("${OPENAI_API_KEY}")
-    private String apiKey;
+    private final String BASE_URL = "https://studhunt-ai-1.onrender.com";
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public String getChatResponse(String message, String mode) throws Exception {
+    // 🔥 CHAT + ROADMAP + INTERVIEW
+    public String getChatResponse(String message, String mode) {
 
-        String systemPrompt = switch (mode.toLowerCase()) {
+        try {
+            String url;
+            Map<String, String> request = new HashMap<>();
 
-            case "interview" -> """
-                    You are StudHunt AI Interview Coach.
-                    Give:
-                    - Most asked interview questions
-                    - Short answers
-                    - Tips to answer confidently
-                    Keep it crisp.
-                    """;
+            switch (mode.toLowerCase()) {
 
-            case "roadmap" -> """
-                    You are StudHunt AI Career Guide.
-                    Give:
-                    - Step-by-step roadmap
-                    - Beginner → Advanced
-                    - Include tools & timeline
-                    Keep it structured.
-                    """;
-
-            default -> """
-                    You are StudHunt AI Study Assistant.
-                    Explain:
-                    - In simple terms
-                    - Use bullet points
-                    - Add examples
-                    Keep it easy to understand.
-                    """;
-        };
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        String url = "https://api.openai.com/v1/chat/completions";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiKey);
-
-        String body = """
-                {
-                  "model": "gpt-4o-mini",
-                  "messages": [
-                    {
-                      "role": "system",
-                      "content": "%s"
-                    },
-                    {
-                      "role": "user",
-                      "content": "%s"
-                    }
-                  ]
+                case "roadmap" -> {
+                    url = BASE_URL + "/generate-roadmap";
+                    request.put("prompt", message);
                 }
-                """.formatted(systemPrompt, message);
 
-        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+                case "interview" -> {
+                    url = BASE_URL + "/chat";
+                    request.put("message",
+                            "Give interview questions, answers, and tips for: " + message);
+                }
 
-        ResponseEntity<String> response =
-                restTemplate.postForEntity(url, entity, String.class);
+                default -> {
+                    url = BASE_URL + "/chat";
+                    request.put("message", message);
+                }
+            }
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
+            ResponseEntity<String> response =
+                    restTemplate.postForEntity(url, request, String.class);
 
-        return root.get("choices").get(0).get("message").get("content").asText();
+            return response.getBody() != null
+                    ? response.getBody()
+                    : "No response from AI";
+
+        } catch (Exception e) {
+            return "⚠️ AI service is busy right now. Try again later.";
+        }
+    }
+
+    // 🔥 DIRECT ROADMAP (USED BY PROFILE)
+    public String getRoadmap(String prompt) {
+
+        try {
+            String url = BASE_URL + "/generate-roadmap";
+
+            Map<String, String> request = new HashMap<>();
+            request.put("prompt", prompt);
+
+            ResponseEntity<String> response =
+                    restTemplate.postForEntity(url, request, String.class);
+
+            return response.getBody() != null
+                    ? response.getBody()
+                    : "No roadmap generated";
+
+        } catch (Exception e) {
+            return "⚠️ Roadmap generation failed.";
+        }
+    }
+
+    // 🔥 RESUME TEXT
+    public String getResume(Map<String, Object> data) {
+
+        try {
+            String url = BASE_URL + "/resume";
+
+            ResponseEntity<String> response =
+                    restTemplate.postForEntity(url, data, String.class);
+
+            return response.getBody() != null
+                    ? response.getBody()
+                    : "No resume generated";
+
+        } catch (Exception e) {
+            return "⚠️ Resume generation failed.";
+        }
+    }
+
+    // 🔥 RESUME PDF DOWNLOAD
+    public byte[] getResumePDF(Map<String, Object> data) {
+
+        try {
+            String url = BASE_URL + "/resume/pdf";
+
+            ResponseEntity<byte[]> response =
+                    restTemplate.postForEntity(url, data, byte[].class);
+
+            return response.getBody();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
