@@ -25,15 +25,14 @@ class ChatResponse(BaseModel):
 
 class StudyTask(str, Enum):
     mcq = "mcq"
-    mind_map = "mind_map"
-    important_questions = "important_questions"
     summary = "summary"
+    important_questions = "important_questions"
+    mind_map = "mind_map"
 
 
 class DocumentStudyResponse(BaseModel):
     file_name: str
     task: StudyTask
-    topic: str | None = None
     output: str
 
 

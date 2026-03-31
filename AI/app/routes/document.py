@@ -10,8 +10,6 @@ router = APIRouter()
 async def study_material(
     file: UploadFile = File(...),
     task: StudyTask = Form(...),
-    topic: str | None = Form(default=None),
-    items_count: int | None = Form(default=None),
 ) -> DocumentStudyResponse:
     try:
         file_bytes = await file.read()
@@ -19,8 +17,6 @@ async def study_material(
             file_name=file.filename or "uploaded-file",
             file_bytes=file_bytes,
             task=task,
-            topic=topic,
-            items_count=items_count,
         )
     except DocumentServiceError as exc:
         raise HTTPException(
@@ -31,6 +27,5 @@ async def study_material(
     return DocumentStudyResponse(
         file_name=file.filename or "uploaded-file",
         task=task,
-        topic=topic,
         output=output,
     )
