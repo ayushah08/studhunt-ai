@@ -1,23 +1,22 @@
 from langchain_core.prompts import PromptTemplate
 
-
-def get_prompt() -> PromptTemplate:
+def get_prompt():
     template = """
     You are an expert career mentor.
 
-    Create a structured learning roadmap based on the user's request.
+    Create a structured learning roadmap.
 
-    User prompt: {prompt}
+    Goal: {goal}
+    Level: {level}
+    Language: {language}
 
     Rules:
     - Divide into 5-7 phases
     - Each phase must include:
-      - Title
-      - Topics
-      - Projects
+        Title
+        Topics
+        Projects
     - Keep it beginner friendly
-    - Use clear, concise language
-    - Tailor the roadmap to the provided goal and skill level
 
     Output format:
 
@@ -31,6 +30,6 @@ def get_prompt() -> PromptTemplate:
     """
 
     return PromptTemplate(
-        input_variables=["prompt"],
-        template=template,
+        input_variables=["goal", "level", "language"],
+        template=template
     )

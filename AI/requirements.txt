@@ -3,10 +3,4 @@ uvicorn
 langchain
 langchain-core
 langchain-community
-langchain-ollama
 pydantic
-requests
-langchain-huggingface
-transformers
-huggingface-hub
-torch

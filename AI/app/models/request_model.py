@@ -1,11 +1,6 @@
-from pydantic import BaseModel, ConfigDict, Field
-
+from pydantic import BaseModel
 
 class RoadmapRequest(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
-
-    prompt: str = Field(..., min_length=5, max_length=1000)
-
-
-class RoadmapResponse(BaseModel):
-    roadmap: str
+    goal: str
+    level: str
+    language: str
