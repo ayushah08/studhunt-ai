@@ -1,5 +1,6 @@
 package com.studhunt_ai.service;
 
+import com.studhunt_ai.dto.PostResponse;
 import com.studhunt_ai.entity.Comment;
 import com.studhunt_ai.entity.Post;
 import com.studhunt_ai.repository.CommentRepository;
@@ -28,9 +29,6 @@ public class CommunityService {
     }
 
     // ✅ GET POSTS
-    public List<Post> getAllPosts() {
-        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-    }
 
     // ✅ ADD COMMENT
     public Comment addComment(Comment comment) {
@@ -56,5 +54,40 @@ public class CommunityService {
         }
 
         return postRepository.save(post);
+    }
+    public List<PostResponse> getAllPosts(Long currentUserId) {
+
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return posts.stream().map(post -> {
+
+            boolean liked = false; // 🔥 TEMP (no reaction table yet)
+
+            return new PostResponse(
+                    post.getId(),
+                    post.getContent(),
+                    post.getId(),   // ✅ FIXED
+                    post.getLikeCount(),
+                    liked,
+                    post.getCreatedAt()
+            );
+        }).toList();
+    }public List<PostResponse> getPostsByUser(Long userId, Long currentUserId) {
+
+        List<Post> posts = postRepository.findByUserId(userId);
+
+        return posts.stream().map(post -> {
+
+            boolean liked = false; // 🔥 TEMP
+
+            return new PostResponse(
+                    post.getId(),
+                    post.getContent(),
+                    post.getId(),   // ✅ FIXED
+                    post.getLikeCount(),
+                    liked,
+                    post.getCreatedAt()
+            );
+        }).toList();
     }
 }
