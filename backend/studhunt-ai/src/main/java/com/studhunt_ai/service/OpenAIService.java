@@ -1,5 +1,6 @@
 package com.studhunt_ai.service;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,10 +14,40 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class OpenAIService {
 
-    @Value("${openai.api.key}")
+    @Value("${OPENAI_API_KEY}")
     private String apiKey;
 
-    public String getChatResponse(String message) throws Exception {
+    public String getChatResponse(String message, String mode) throws Exception {
+
+        String systemPrompt = switch (mode.toLowerCase()) {
+
+            case "interview" -> """
+                    You are StudHunt AI Interview Coach.
+                    Give:
+                    - Most asked interview questions
+                    - Short answers
+                    - Tips to answer confidently
+                    Keep it crisp.
+                    """;
+
+            case "roadmap" -> """
+                    You are StudHunt AI Career Guide.
+                    Give:
+                    - Step-by-step roadmap
+                    - Beginner → Advanced
+                    - Include tools & timeline
+                    Keep it structured.
+                    """;
+
+            default -> """
+                    You are StudHunt AI Study Assistant.
+                    Explain:
+                    - In simple terms
+                    - Use bullet points
+                    - Add examples
+                    Keep it easy to understand.
+                    """;
+        };
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -27,20 +58,20 @@ public class OpenAIService {
         headers.setBearerAuth(apiKey);
 
         String body = """
-{
-  "model": "gpt-4o-mini",
-  "messages": [
-    {
-      "role": "system",
-      "content": "You are StudHunt AI — a smart academic assistant built for students. Your job is to help students learn faster, prepare for exams, and crack internships. Always respond in a structured, clear, and practical way.\n\nRules:\n- Use bullet points instead of long paragraphs\n- Explain in simple terms (like teaching a 2nd year student)\n- Give real-world examples\n- If it's coding, include examples\n- If it's theory, simplify it\n- Keep answers concise but useful\n- Avoid generic textbook definitions\n- Focus on helping the student take action\n\nIf the question is about:\n- Programming → explain + example + use case\n- Interview prep → give direct answers + tips\n- Concepts → break into bullets\n\nTone:\n- Friendly but smart\n- Not robotic\n- Not too long\n\nGoal: Make the student understand quickly and feel confident."
-    },
-    {
-      "role": "user",
-      "content": "%s"
-    }
-  ]
-}
-""".formatted(message);
+                {
+                  "model": "gpt-4o-mini",
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "%s"
+                    },
+                    {
+                      "role": "user",
+                      "content": "%s"
+                    }
+                  ]
+                }
+                """.formatted(systemPrompt, message);
 
         HttpEntity<String> entity = new HttpEntity<>(body, headers);
 
@@ -50,11 +81,6 @@ public class OpenAIService {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
 
-        return root
-                .get("choices")
-                .get(0)
-                .get("message")
-                .get("content")
-                .asText();
+        return root.get("choices").get(0).get("message").get("content").asText();
     }
 }
