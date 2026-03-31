@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .routes.chat import router as chat_router
 from .routes.roadmap import router as roadmap_router
 
 app = FastAPI(
@@ -29,3 +30,4 @@ def health_check() -> dict[str, str]:
 
 
 app.include_router(roadmap_router, tags=["roadmap"])
+app.include_router(chat_router, tags=["chat"])

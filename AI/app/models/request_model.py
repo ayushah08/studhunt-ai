@@ -9,3 +9,13 @@ class RoadmapRequest(BaseModel):
 
 class RoadmapResponse(BaseModel):
     roadmap: str
+
+
+class ChatRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    message: str = Field(..., min_length=1, max_length=2000)
+
+
+class ChatResponse(BaseModel):
+    answer: str
