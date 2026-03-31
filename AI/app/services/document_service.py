@@ -103,9 +103,18 @@ def generate_document_output(
     file_bytes: bytes,
     task: StudyTask,
     topic: str | None = None,
-    items_count: int = 10,
+    items_count: int | None = None,
 ) -> str:
     content = extract_text_from_document(file_name=file_name, file_bytes=file_bytes)
+    resolved_topic = topic or "No specific topic selected. Cover the most important ideas from the uploaded material."
+
+    if items_count is not None and items_count < 1:
+        raise DocumentServiceError("items_count must be at least 1 when provided.")
+
+    if task in {StudyTask.mcq, StudyTask.important_questions}:
+        resolved_items_count = items_count or 10
+    else:
+        resolved_items_count = "Not applicable"
 
     try:
         chain = build_document_chain()
@@ -113,9 +122,9 @@ def generate_document_output(
             {
                 "file_name": file_name,
                 "task": task.value,
-                "topic": topic or "Use the most important topics from the document.",
+                "topic": resolved_topic,
                 "content": content,
-                "items_count": items_count,
+                "items_count": resolved_items_count,
             }
         )
     except ValueError as exc:

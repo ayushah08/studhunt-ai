@@ -11,7 +11,7 @@ async def study_material(
     file: UploadFile = File(...),
     task: StudyTask = Form(...),
     topic: str | None = Form(default=None),
-    items_count: int = Form(default=10),
+    items_count: int | None = Form(default=None),
 ) -> DocumentStudyResponse:
     try:
         file_bytes = await file.read()
