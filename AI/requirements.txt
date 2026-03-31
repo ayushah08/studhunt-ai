@@ -2,8 +2,11 @@ fastapi
 uvicorn
 langchain
 langchain-core
-langchain-google-genai
+langchain-community
+langchain-ollama
 pydantic
-python-multipart
-pypdf
-python-dotenv
+requests
+langchain-huggingface
+transformers
+huggingface-hub
+torch
