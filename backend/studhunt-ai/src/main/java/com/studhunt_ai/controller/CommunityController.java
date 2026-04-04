@@ -53,8 +53,9 @@ public class CommunityController {
     @PostMapping("/react/{postId}")
     public ResponseEntity<Post> react(
             @PathVariable Long postId,
-            @RequestParam String type
+            @RequestParam String type,
+            @RequestParam String userEmail
     ) {
-        return ResponseEntity.ok(communityService.reactToPost(postId, type));
+        return ResponseEntity.ok(communityService.reactToPostWithNotification(postId, type, userEmail));
     }
 }

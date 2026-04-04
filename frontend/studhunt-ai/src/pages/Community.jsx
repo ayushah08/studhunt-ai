@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { 
   FiArrowLeft, FiSend, FiMessageSquare, FiZap, FiPlus, 
-  FiClock, FiTrendingUp, FiActivity, FiShield, FiCpu 
+  FiClock, FiTrendingUp, FiActivity, FiShield, FiCpu, FiX
 } from "react-icons/fi";
 
 const Community = () => {
@@ -11,6 +11,9 @@ const Community = () => {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
   const [loading, setLoading] = useState(true);
+  const [commentStates, setCommentStates] = useState({}); // Track open comment sections
+  const [comments, setComments] = useState({}); // Store comments by post ID
+  const [newComments, setNewComments] = useState({}); // Track new comment input per post
 
   const userId = localStorage.getItem('userId') || 1;
   const username = localStorage.getItem('username') || "Architect";
@@ -24,6 +27,48 @@ const Community = () => {
     } catch (err) {
       console.error("Fetch Error:", err);
       setLoading(false);
+    }
+  };
+
+  // FETCH COMMENTS FOR A POST
+  const fetchComments = async (postId) => {
+    try {
+      const res = await axios.get(`https://studhunt-ai.onrender.com/community/comments/${postId}`);
+      setComments(prev => ({ ...prev, [postId]: res.data || [] }));
+    } catch (err) {
+      console.error("Fetch Comments Error:", err);
+      setComments(prev => ({ ...prev, [postId]: [] }));
+    }
+  };
+
+  // TOGGLE COMMENT SECTION
+  const toggleComments = async (postId) => {
+    setCommentStates(prev => {
+      const newState = { ...prev, [postId]: !prev[postId] };
+      // Fetch comments when opening
+      if (newState[postId]) {
+        fetchComments(postId);
+      }
+      return newState;
+    });
+  };
+
+  // ADD COMMENT
+  const handleAddComment = async (postId) => {
+    const commentText = newComments[postId]?.trim();
+    if (!commentText) return;
+
+    try {
+      await axios.post('https://studhunt-ai.onrender.com/community/comment', {
+        postId: postId,
+        userId: parseInt(userId),
+        content: commentText
+      });
+      setNewComments(prev => ({ ...prev, [postId]: "" }));
+      fetchComments(postId); // Refresh comments
+    } catch (err) {
+      console.error("Add Comment Error:", err);
+      alert("Failed to add comment!");
     }
   };
 
@@ -52,7 +97,7 @@ const Community = () => {
   const handleReact = async (postId, type) => {
     try {
       // type will be LIKE, LAUGH, ANGRY, SAD, SMILE, or PARTY
-      await axios.post(`https://studhunt-ai.onrender.com/community/react/${postId}?type=${type}`);
+      await axios.post(`https://studhunt-ai.onrender.com/community/react/${postId}?type=${type}&userEmail=${username}`);
       fetchPosts(); 
     } catch (err) {
       console.error("React Error:", err);
@@ -158,12 +203,72 @@ const Community = () => {
                     </button>
                   ))}
                   
-                  <div className="ml-auto flex items-center gap-4">
-                     <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors">
-                        <FiMessageSquare /> {post.commentsCount || 0}
+                  <div className="ml-auto">
+                     <button 
+                       onClick={() => toggleComments(post.id)}
+                       className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-indigo-400 transition-colors bg-[#0F172A] border border-slate-800 px-3 py-2 rounded-lg hover:border-indigo-500 active:scale-95"
+                     >
+                        <FiMessageSquare size={14} /> 
+                        <span>{(comments[post.id]?.length) || 0} Comments</span>
                      </button>
                   </div>
                 </div>
+
+                {/* COMMENTS SECTION */}
+                {commentStates[post.id] && (
+                  <div className="mt-8 pt-6 border-t border-slate-800/50 space-y-6">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 flex items-center gap-2">
+                      <FiMessageSquare size={14} /> Discussion Thread ({comments[post.id]?.length || 0})
+                    </h4>
+
+                    {/* ADD COMMENT FORM */}
+                    <div className="bg-[#0F172A]/50 border border-slate-800/50 p-4 rounded-2xl space-y-3">
+                      <textarea
+                        value={newComments[post.id] || ""}
+                        onChange={(e) => setNewComments(prev => ({ ...prev, [post.id]: e.target.value }))}
+                        placeholder="Share your thoughts..."
+                        className="w-full bg-[#0F172A] border border-slate-800 rounded-xl py-3 px-4 text-sm focus:border-indigo-500 outline-none transition-all placeholder:text-slate-700 font-medium resize-none"
+                        rows="2"
+                      />
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => handleAddComment(post.id)}
+                          className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-black uppercase italic tracking-widest text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+                        >
+                          <FiSend size={12} /> Post
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* COMMENTS LIST */}
+                    <div className="space-y-4 max-h-96 overflow-y-auto">
+                      {comments[post.id]?.length > 0 ? (
+                        comments[post.id].map((comment, idx) => (
+                          <div key={idx} className="bg-[#0F172A]/50 border border-slate-800/50 p-4 rounded-xl text-left">
+                            <div className="flex items-start gap-3 mb-2">
+                              <div className="w-8 h-8 rounded-lg bg-[#1E293B] border border-slate-800 flex items-center justify-center font-bold text-indigo-400 text-xs flex-shrink-0">
+                                {comment.userEmail?.charAt(0).toUpperCase() || "U"}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-black uppercase tracking-widest text-slate-300 truncate">
+                                  {comment.userEmail || "Anonymous"}
+                                </p>
+                                <p className="text-[8px] text-slate-600 uppercase tracking-widest mt-1">
+                                  {new Date(comment.createdAt || Date.now()).toLocaleTimeString()}
+                                </p>
+                              </div>
+                            </div>
+                            <p className="text-xs text-slate-300 leading-relaxed pl-11">
+                              {comment.content}
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-xs text-slate-600 italic text-center py-4">No comments yet. Be the first to share!</p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

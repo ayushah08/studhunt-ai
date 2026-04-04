@@ -23,9 +23,9 @@ public class Post {
     private LocalDateTime createdAt;
 
     // reactions
-    private int likeCount;
-    private int laughCount;
-    private int angryCount;
-    private int sadCount;
-    private int celebrateCount;
+    private int likeCount = 0;
+    private int laughCount = 0;
+    private int angryCount = 0;
+    private int sadCount = 0;
+    private int celebrateCount = 0;
 }
